@@ -52,6 +52,14 @@ def main():
 
     if not path.isdir(".MYCVS"):
         print("first checkin wow !!")
+        # command = 'groupadd group{}'.format(filename)
+        # os.popen("su -S %s"%(command), 'w').write('kosm1011')
+        sudoPassword = "kosm1011"
+        # os.popen('echo %s|sudo -u %s -S %s' % (sudoPassword, user, command))
+        os.popen("echo {} | su -c 'groupadd group_{}'".format(sudoPassword, filename))
+        os.popen("echo {} | su -c 'chgrp group_{} {}'".format(sudoPassword, filename,filename))
+
+
         
         # create .MYCVS Directory
         # newpath = os.path.join(os.getcwd(),".MYCVS")
@@ -62,6 +70,8 @@ def main():
         file1 = open(".MYCVS/{}.myv".format(filename), "a")
         file1.write("start revesions")
         file1.close()
+
+
     else:
         print("not first checkin")
         writerevision(filename)
