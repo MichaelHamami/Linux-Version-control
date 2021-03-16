@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
 
-
-import glob
 import sys
 import os
 import shutil
 import subprocess
-from decimal import *
 from os import path
 
 def create_patch_file(revision,filename):
@@ -23,17 +20,9 @@ def create_patch_file(revision,filename):
             if "#mycvs:{}".format(revision) in line:
                 start_revision = True
     file1.close()
-    #todo change first line - try ...
-    # print(lines_for_temp[0])
-
-    # lines_for_temp[0] = lines_for_temp[0].replace(".MYCVS/{}.copy".format(filename),"last_revision.txt",1)
-    # print(lines_for_temp[0])
-    # print(lines_for_temp)
     file_temp = open("temp_patchfile.patch","w")
     file_temp.writelines(lines_for_temp)
     file_temp.close()
-    # create copy of .MYCVS/FILENAME.copy to save last revision.
-    # shutil.copyfile(".MYCVS/{}.copy".format(filename),"last_revision.txt")
     return "temp_patchfile.patch"
 
 
@@ -58,13 +47,12 @@ def create_revision(file1, file2):
             print("the line that added:{}".format(line))
             lines_for_last_revision.append(line[1:])
     
-        # print("{} {}".format(line[0],line[1]))
     file1.close()
     file2 = open("revision.txt","w")
     file2.writelines(lines_for_last_revision)
     file2.close()
     return "revision.txt"
-    
+
 def remove_temps():
     # stream = os.popen('cat .MYCVS/{}.copy'.format(file1))
     pass

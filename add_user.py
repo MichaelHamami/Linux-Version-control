@@ -26,7 +26,6 @@ def main():
     rootPassword = "kosm1011"
     if(username == ownername):
         os.popen("echo {} | su -c 'usermod -a -G {} {}'".format(rootPassword,groupname,user_to_add))
-        # os.popen("echo {} | su -c 'deluser {} {}'".format(rootPassword,user_to_add,groupname))
 
     return 0
 

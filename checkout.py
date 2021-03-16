@@ -7,14 +7,13 @@ import shutil
 import subprocess
 from decimal import *
 from os import path
-
+import pwd
 
 def create_revision():
     file1 = open("temp_patchfile.patch","r")
     lines_for_last_revision = []
     for line in file1:
         if (line[0:3]!= "+++" and (line[0] == "+" or line[0] ==" ")):
-            # print("the line that added:{}".format(line))
             lines_for_last_revision.append(line[1:])
     
     file1.close()
@@ -24,7 +23,6 @@ def create_revision():
     return "revision.txt"
 
 def create_patch_file(revision,filename):
-    print("create_patch_file called with revision: {} and filename: {}".format(revision,filename))
     file1 = open(".MYCVS/{}.myv".format(filename))
     start_revision = False
     lines_for_temp = []
@@ -65,6 +63,9 @@ def main():
     else:
         filename = sys.argv[1]
         revision = getlastrevision(filename)
+    user_running = os.getlogin()
+    st = os.stat(filename)
+    ownername = pwd.getpwuid(st.st_uid).pw_name
     if(ownername != user_running):
         groupname = getgrgid(os.stat(filename).st_gid).gr_name
         stream = os.popen("members {} ".format(groupname))

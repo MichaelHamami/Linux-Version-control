@@ -6,7 +6,6 @@ import sys
 import os
 import shutil
 import subprocess
-from decimal import *
 from os import path
 import pwd
 
@@ -20,7 +19,6 @@ def writerevision(filename):
     output = stream.readlines()
     file1.writelines(output)
     file1.write("#endrevision:{:.3f}\n".format(current_revision))
-
     file1.close()
 
     
@@ -31,8 +29,6 @@ def getlastrevision(filename):
     print(output)
     if "#endrevision" in output:
         num_revision = output[-6:]
-        # print(num_revision)
-        # print(float(num_revision))
         return float(num_revision)
     else:
         return 1.000
@@ -46,6 +42,8 @@ def main():
     print(sys.argv[1])
     filename = sys.argv[1]
     user_running = os.getlogin()
+    st = os.stat(filename)
+    ownername = pwd.getpwuid(st.st_uid).pw_name
     print("Current working directory: {0}".format(os.getcwd()))
     print("The directory .MYCVS exits? : {}".format(path.isdir(".MYCVS")))
     # check if there is a file with in our args ,
@@ -55,22 +53,15 @@ def main():
 
     if not path.isdir(".MYCVS"):
         print("first checkin !!")
-        ownername = pwd.getpwuid(st.st_uid).pw_name
-        if(ownername != user_running)
-        {
+        if(ownername != user_running):
             print("Only the owner of the file can do the first checkin")
             return 0
-        }
-        # command = 'groupadd group{}'.format(filename)
-        # os.popen("su -S %s"%(command), 'w').write('kosm1011')
-        sudoPassword = "kosm1011"
-        # os.popen('echo %s|sudo -u %s -S %s' % (sudoPassword, user, command))
-        os.popen("echo {} | su -c 'groupadd group_{}'".format(sudoPassword, filename))
-        os.popen("echo {} | su -c 'chgrp group_{} {}'".format(sudoPassword, filename,filename))
+
+        rootPassword = "kosm1011"
+        os.popen("echo {} | su -c 'groupadd group_{}'".format(rootPassword, filename))
+        os.popen("echo {} | su -c 'chgrp group_{} {}'".format(rootPassword, filename,filename))
 
         # create .MYCVS Directory
-        # newpath = os.path.join(os.getcwd(),".MYCVS")
-        # print(newpath)
         os.mkdir(".MYCVS")
         # Create an copy of the original file
         shutil.copyfile(sys.argv[1],".MYCVS/{}.copy".format(sys.argv[1]))
@@ -95,9 +86,6 @@ def main():
         
         writerevision(filename)
         return 0
-
-        # shutil.copyfile(sys.argv[1],".MYCVS/{}.myv".format(sys.argv[1]))
-
 
 if __name__ == "__main__":
     main()
