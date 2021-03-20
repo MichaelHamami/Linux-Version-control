@@ -8,7 +8,7 @@ from grp import getgrgid
 
 
 def main():
-    #  chack the user input is only 1 args 1 path is default and 1 file name
+    #  check the user input is only 1 args 1 path is default and 1 file name
     if len(sys.argv) != 3:
         print("please enter file name and then username")
         return 0

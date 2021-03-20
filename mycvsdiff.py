@@ -67,7 +67,7 @@ def diff_revisions(file1,file2):
 
 def main():
     print(sys.argv)
-    #  chack the user input is only 1 args 1 path is default and 1 file name
+    #  check the user input is only 1 args 1 path is default and 1 file name
     if len(sys.argv) != 4 and len(sys.argv) != 2:
         print("please enter one file name or -r then revision and then one filename")
         return 0
