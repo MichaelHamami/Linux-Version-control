@@ -5,7 +5,6 @@ import os
 
 
 def create_patch_file(revision,filename):
-    print("create_patch_file called with revision: {} and filename: {}".format(revision,filename))
     file1 = open(".MYCVS/{}.myv".format(filename))
     start_revision = False
     lines_for_temp = []

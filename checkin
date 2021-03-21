@@ -5,6 +5,7 @@ import os
 import shutil
 from os import path
 import pwd
+import subprocess
 
 def write_revision(filename):
     num_revision = get_last_revision(filename)
@@ -46,7 +47,6 @@ def main():
     root_password = "kosm1011"
     print("Current working directory: {0}".format(os.getcwd()))
     print("The directory .MYCVS exits? : {}".format(path.isdir(".MYCVS")))
-    print("this is okey?")
     # check if there is a file with in our args ,
     if not path.exists(sys.argv[1]):
         print("There is no file exitsts with name: {}".format(sys.argv[1]))
@@ -58,7 +58,11 @@ def main():
             print("Only the owner of the file can do the first checkin")
             return 0
         
-        os.popen("echo {} | su -c 'groupadd group_{}'".format(root_password, filename))
+        # os.popen("echo {} | su -c 'groupadd group_{}'".format(root_password, filename))
+        add_group_command = "echo {} | su -c 'groupadd group_{}'".format(root_password, filename)
+        change_file_owner_command = "echo {} | su -c 'chgrp group_{} {}'".format(root_password, filename,filename)
+        p = subprocess.Popen(add_group_command, stdout=subprocess.PIPE, shell=True)
+        (output, err) = p.communicate()
 
         # create .MYCVS Directory
         os.mkdir(".MYCVS")
@@ -67,7 +71,9 @@ def main():
         file1 = open(".MYCVS/{}.myv".format(filename), "a")
         file1.write("start revesions")
         file1.close()
+        p.wait()
         os.popen("echo {} | su -c 'chgrp group_{} {}'".format(root_password, filename,filename))
+        # os.popen("echo {} | su -c 'chgrp group_{} {}'".format(root_password, filename,filename))
         return 0
 
     else:

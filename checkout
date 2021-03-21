@@ -57,7 +57,7 @@ def main():
         print(revision)
     else:
         filename = sys.argv[1]
-        revision = mycvsdiff.getlastrevision(filename)
+        revision = getlastrevision(filename)
     user_running = os.getlogin()
     st = os.stat(filename)
     owner_name = pwd.getpwuid(st.st_uid).pw_name
@@ -69,8 +69,8 @@ def main():
             print("The user cant do checkin without been a group member of this file.")
             return 0
         
-    mycvsdiff.create_patch_file(revision, filename)
-    mycvsdiff.create_revision(revision, filename)
+    create_patch_file(revision, filename)
+    create_revision()
     f = open("revision.txt", "r")
     print(f.read())
     f.close()
