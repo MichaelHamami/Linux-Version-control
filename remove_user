@@ -17,17 +17,10 @@ def main():
     owner_name = pwd.getpwuid(st.st_uid).pw_name
     group_name = getgrgid(os.stat(filename).st_gid).gr_name
     user_run = os.getlogin()
-    print(filename)
-    print(owner_name)
-    print(group_name)
-    print(user_to_remove)
-    print(user_run)
     root_password = "kosm1011"
-    # todo - fix error of rm
     if user_run == owner_name:
         os.popen("echo {} | su -c 'gpasswd --delete {} {} > somefile.txt'".format(root_password, user_to_remove, group_name))
-
-        # os.popen("rm somefile.txt")
+        os.popen("echo {} | su -c 'rm somefile.txt'".format(root_password))
     return 0
 
 
